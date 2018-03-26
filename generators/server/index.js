@@ -213,6 +213,7 @@ module.exports = class extends Generator {
       'forest/account.js',
       'source/controller/forest/index.js',
       'source/controller/forest/account.js',
+      'source/middleware/forest-admin.js',
     ].map((item) => this.fs.copyTpl(
       this.templatePath(item),
       this.destinationPath(item),
