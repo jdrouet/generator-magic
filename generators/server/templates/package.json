@@ -1,0 +1,12 @@
+{
+  "name": "<%= name %>",
+  "version": "0.0.1",
+  "scripts": {
+    <% if(database) { %>
+    "postinstall": "sequelize db:migrate",
+    <% } %>
+    "watch": "nodemon -w source source/index.js",
+    "start": "node source/index.js",
+    "test": "mocha"
+  }
+}
