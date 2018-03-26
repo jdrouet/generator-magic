@@ -138,6 +138,7 @@ module.exports = class extends Generator {
     this.log('writing base');
     return Promise.all([
       'readme.md',
+      '.circleci/config.yml',
       'package.json',
       'source/index.js',
       'source/config.js',

@@ -17,16 +17,28 @@ describe('magic:server - database', () => {
       })
       .then((dir) => {
         assert.file([
+          'readme.md',
+          '.circleci/config.yml',
+          'package.json',
           'source/index.js',
-          'source/server.js',
           'source/config.js',
+          'source/server.js',
           'source/controller/index.js',
           'source/controller/status.js',
-          'source/model/index.js',
-          'source/model/account.js',
+          'source/middleware/cors.js',
+          'source/middleware/json-web-token.js',
+          'source/middleware/error-handler.js',
           'test/helper/index.js',
           'test/ctrl__status.js',
           'test/global.js',
+          '.sequelizerc',
+          'database.js',
+          'migrations/20180302211939-create-account.js',
+          'source/model/index.js',
+          'source/model/account.js',
+          'source/service/sequelize.js',
+          'test/helper/account.js',
+          'test/helper/database.js',
         ]);
         return runTests(path.join(dir, 'test-with-database'));
       });

@@ -18,12 +18,20 @@ describe('magic:server - basic', () => {
       })
       .then((dir) => {
         assert.file([
+          'readme.md',
+          '.circleci/config.yml',
+          'package.json',
           'source/index.js',
-          'source/server.js',
           'source/config.js',
+          'source/server.js',
           'source/controller/index.js',
           'source/controller/status.js',
+          'source/middleware/cors.js',
+          'source/middleware/json-web-token.js',
+          'source/middleware/error-handler.js',
+          'test/helper/index.js',
           'test/ctrl__status.js',
+          'test/global.js',
         ]);
         return runTests(path.join(dir, 'test-basic'));
       });
