@@ -38,4 +38,9 @@ module.exports = require('nconf')
       },
     },
     <% } %>
+    <% if (worker) { %>
+    rabbit: {
+      url: 'amqp://guest:guest@localhost/<%= path %>',
+    },
+    <% } %>
   });

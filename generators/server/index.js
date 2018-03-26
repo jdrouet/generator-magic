@@ -27,6 +27,10 @@ module.exports = class extends Generator {
       type: Boolean,
       required: false,
     });
+    this.option('worker', {
+      type: Boolean,
+      required: false,
+    });
   }
 
   __prompting_general() {
@@ -68,6 +72,14 @@ module.exports = class extends Generator {
         type: 'confirm',
         name: 'forest',
         message: 'Do you need a forest',
+        default: true,
+      });
+    }
+    if (this.options.worker === undefined) {
+      prompts.push({
+        type: 'confirm',
+        name: 'worker',
+        message: 'Do you need a worker',
         default: true,
       });
     }
@@ -208,12 +220,26 @@ module.exports = class extends Generator {
     ));
   }
 
+  __writing_worker() {
+    if (!this.props.worker) return;
+    this.log('writing worker');
+    [
+      'source/service/rabbit.js',
+      'source/worker/index.js',
+    ].map((item) => this.fs.copyTpl(
+      this.templatePath(item),
+      this.destinationPath(item),
+      this.props,
+    ));
+  }
+
   writing() {
     this.destinationRoot(path.join(this.destinationRoot(), this.props.path));
     this.__writing_base();
     this.__writing_database();
     this.__writing_forest();
     this.__writing_apidoc();
+    this.__writing_worker();
   }
 
   install() {
@@ -225,8 +251,11 @@ module.exports = class extends Generator {
   end() {
     console.log('Before doing anything...');
     if (this.props.database) {
-      console.log('You need to create a database');
+      console.log('🔴  You need to create a database');
       console.log('docker exec -i -t postgres createdb -h localhost -U postgres --owner root', this.props.path);
+    }
+    if (this.props.worker) {
+      console.log('🔴  You need to create a virtual host on rabbit :', this.props.path);
     }
     console.log('...that\'s it');
     console.log('Bye bye!');
