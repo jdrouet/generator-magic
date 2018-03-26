@@ -1,53 +1,80 @@
 const Generator = require('yeoman-generator');
+const path = require('path');
 const lodash = require('lodash');
 
 module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
-    this.props = {};
     this.__dependencies = [];
     this.__devDependencies = [];
+    this.option('name', {
+      type: String,
+      required: false,
+    });
+    this.option('port', {
+      type: Number,
+      required: false,
+    });
+    this.option('database', {
+      type: Boolean,
+      required: false,
+    });
+    this.option('sendgrid', {
+      type: Boolean,
+      required: false,
+    });
+    this.option('forest', {
+      type: Boolean,
+      required: false,
+    });
   }
 
   __prompting_general() {
-    return this.prompt([{
-      type: 'input',
-      name: 'name',
-      message: 'Your project name',
-      default: this.appname,
-    }, {
-      type: 'input',
-      name: 'port',
-      message: 'What port should we use',
-      default: 3000,
-    }, {
-      type: 'confirm',
-      name: 'database',
-      message: 'Do you need a database',
-      default: true,
-    // }, {
-    //   type: 'confirm',
-    //   name: 'worker',
-    //   message: 'Do you need a worker',
-    //   default: true,
-    }, {
-      type: 'confirm',
-      name: 'sendgrid',
-      message: 'Do you need a sendgrid',
-      default: true,
-    }, {
-      type: 'confirm',
-      name: 'forest',
-      message: 'Do you need a forest',
-      default: true,
-    // }, {
-    //   type: 'confirm',
-    //   name: 'apidoc',
-    //   message: 'Do you need a documentation',
-      // default: true,
-    }]).then((result) => {
-      this.props.path = lodash.kebabCase(result.name);
-      Object.assign(this.props, result);
+    const prompts = [];
+    if (!this.options.name) {
+      prompts.push({
+        type: 'input',
+        name: 'name',
+        message: 'Your project name',
+        default: this.appname,
+      });
+    }
+    if (!this.options.port) {
+      prompts.push({
+        type: 'input',
+        name: 'port',
+        message: 'What port should we use',
+        default: 3000,
+      });
+    }
+    if (this.options.database === undefined) {
+      prompts.push({
+        type: 'confirm',
+        name: 'database',
+        message: 'Do you need a database',
+        default: true,
+      });
+    }
+    if (this.options.sendgrid === undefined) {
+      prompts.push({
+        type: 'confirm',
+        name: 'sendgrid',
+        message: 'Do you need a sendgrid',
+        default: true,
+      });
+    }
+    if (this.options.forest === undefined) {
+      prompts.push({
+        type: 'confirm',
+        name: 'forest',
+        message: 'Do you need a forest',
+        default: true,
+      });
+    }
+    return this.prompt(prompts).then((result) => {
+      this.props = Object.assign(this.options, result, {
+        path: lodash.kebabCase(result.name),
+      });
     });
   }
 
@@ -181,7 +208,7 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    this.destinationRoot(this.props.path);
+    this.destinationRoot(path.join(this.destinationRoot(), this.props.path));
     this.__writing_base();
     this.__writing_database();
     this.__writing_forest();
