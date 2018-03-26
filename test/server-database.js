@@ -1,18 +1,17 @@
-const fs = require('fs');
 const path = require('path');
 const helpers = require('yeoman-test');
 const assert = require('yeoman-assert');
 const {runTests} = require('./helpers/generator');
 
-describe('magic:server - basic', () => {
-  it('generates a naked project', () => {
+describe('magic:server - database', () => {
+  it('generates a project', () => {
     return helpers
       .run(path.join(__dirname, '../generators/server'))
       .withOptions({skipInstall: false})
       .withPrompts({
-        name: 'testBasic',
+        name: 'testWithDatabase',
         port: 3412,
-        database: false,
+        database: true,
         sendgrid: false,
         forest: false,
       })
@@ -23,9 +22,13 @@ describe('magic:server - basic', () => {
           'source/config.js',
           'source/controller/index.js',
           'source/controller/status.js',
+          'source/model/index.js',
+          'source/model/account.js',
+          'test/helper/index.js',
           'test/ctrl__status.js',
+          'test/global.js',
         ]);
-        return runTests(path.join(dir, 'test-basic'));
+        return runTests(path.join(dir, 'test-with-database'));
       });
   }).timeout(240000);
 });
