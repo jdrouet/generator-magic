@@ -15,3 +15,13 @@ First you need to install [nodejs](https://github.com/creationix/nvm) and then
 `yo magic:server`
 
 And answer the questions :P
+
+## Todo
+
+- [x] Implement a simple backend
+- [x] Integrate sequelize for postgresql
+- [x] Integrate rabbitmq to implement workers
+- [x] Integrate a circleci template
+- [ ] Integrate a sendgrid configuration
+- [ ] Implement a magic link templace
+- [ ] Add a app.json file for heroku
